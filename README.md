@@ -11,6 +11,22 @@ import Redirect
 redirect "/path", "/new-path", :permanent
 ```
 
+The third argument passed to `redirect/3` must be either `:permanent` or
+`:temporary`. This setting sets the HTTP status code to 301 or 302 respectively.
+
+Note that `Plug.Conn` will be halted right after redirecting.
+
+You may also import `:redirect`'s formatter configuration by importing
+`redirect` into your `.formatter.exs` file (this allows for example to keep
+`redirect "/path", "/new-path", :permanent` without parentheses when running `mix format`).
+
+```elixir
+[
+  import_deps: [:ecto, :phoenix, :redirect],
+  #...
+]
+```
+
 ## Installation
 
 Add `redirect` for Elixir as a dependency in your `mix.exs` file:
@@ -18,7 +34,7 @@ Add `redirect` for Elixir as a dependency in your `mix.exs` file:
 ```elixir
 def deps do
   [
-    {:redirect, "~> 0.1.0"}
+    {:redirect, "~> 0.2.0"}
   ]
 end
 ```
