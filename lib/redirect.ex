@@ -42,13 +42,13 @@ defmodule Redirect do
 
   defmacro redirect(path, "http" <> _ = to, type) do
     quote do
-      forward(unquote(path), unquote(__MODULE__), external: unquote(to), type: unquote(type))
+      match(:*, unquote(path), unquote(__MODULE__), external: unquote(to), type: unquote(type))
     end
   end
 
   defmacro redirect(path, to, type) do
     quote do
-      forward(unquote(path), unquote(__MODULE__), to: unquote(to), type: unquote(type))
+      match(:*, unquote(path), unquote(__MODULE__), to: unquote(to), type: unquote(type))
     end
   end
 end
