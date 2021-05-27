@@ -11,6 +11,8 @@ import Redirect
 redirect "/path", "/new-path", :permanent
 ```
 
+⚠️ `redirect/3` doesn't work inside scopes (`scope/2`/`scope/3`/`scope/4`)
+
 The third argument passed to `redirect/3` must be either `:permanent` or
 `:temporary`. This setting sets the HTTP status code to 301 or 302 respectively.
 
