@@ -5,7 +5,7 @@ defmodule RedirectTest do
   doctest Redirect
 
   test "plug redirects permanently" do
-    options = Redirect.init(to: "/bar", type: :permanent)
+    options = Redirect.init(to: "/bar", type: :permanent, opts: [])
 
     conn = conn(:get, "/foo")
     conn = Redirect.call(conn, options)
@@ -15,7 +15,7 @@ defmodule RedirectTest do
   end
 
   test "plug redirects temporarily" do
-    options = Redirect.init(to: "/bar", type: :temporary)
+    options = Redirect.init(to: "/bar", type: :temporary, opts: [])
 
     conn = conn(:get, "/foo")
     conn = Redirect.call(conn, options)
