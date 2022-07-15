@@ -21,6 +21,8 @@ defmodule Redirect do
     end
 
     opts
+    |> Keyword.put(:preserve_query_string, Keyword.get(opts[:opts], :preserve_query_string, false))
+    |> Keyword.delete(:opts)
   end
 
   def call(conn, opts) do
@@ -34,21 +36,30 @@ defmodule Redirect do
   defp put_redirect_status(conn, :temporary), do: put_status(conn, 302)
 
   defp do_redirect(conn, opts) do
+    query_string =
+      if opts[:preserve_query_string] && conn.params != %{} do
+        "?#{URI.encode_query(conn.params)}"
+      else
+        ""
+      end
+
     cond do
-      to = opts[:to] -> Controller.redirect(conn, to: to)
-      external = opts[:external] -> Controller.redirect(conn, external: external)
+      to = opts[:to] -> Controller.redirect(conn, to: to <> query_string)
+      external = opts[:external] -> Controller.redirect(conn, external: external <> query_string)
     end
   end
 
-  defmacro redirect(path, "http" <> _ = to, type) do
+  defmacro redirect(path, to, type, opts \\ [])
+
+  defmacro redirect(path, "http" <> _ = to, type, opts) do
     quote do
-      match(:*, unquote(path), unquote(__MODULE__), external: unquote(to), type: unquote(type))
+      match(:*, unquote(path), unquote(__MODULE__), external: unquote(to), type: unquote(type), opts: unquote(opts))
     end
   end
 
-  defmacro redirect(path, to, type) do
+  defmacro redirect(path, to, type, opts) do
     quote do
-      match(:*, unquote(path), unquote(__MODULE__), to: unquote(to), type: unquote(type))
+      match(:*, unquote(path), unquote(__MODULE__), to: unquote(to), type: unquote(type), opts: unquote(opts))
     end
   end
 end
