@@ -39,7 +39,7 @@ Add `redirect` for Elixir as a dependency in your `mix.exs` file:
 ```elixir
 def deps do
   [
-    {:redirect, "~> 0.3.0"}
+    {:redirect, "~> 0.4.0"}
   ]
 end
 ```
